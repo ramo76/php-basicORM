@@ -19,17 +19,22 @@ class Intereses extends Entidad{
                                 "updateable" => true, 
                                 "value" => null, 
                                 "original" => null, 
-                                "status" => ColStatus::NOTMODIFIED],
+                                "status" => PropertyStatus::NOTMODIFIED],
             "interes" => [  "db_name" => "interes",
                             "type" => "string", 
                             "primary" => false, 
                             "updateable" => "true", 
                             "value" => null, 
                             "original" => null, 
-                            "status" => ColStatus::NOTMODIFIED]
+                            "status" => PropertyStatus::NOTMODIFIED]
     ];
 }
 
 include "./db_cnx.php";
 
 var_dump((new Intereses($cnx))->retrieve(1));
+
+$ent = Intereses::getEntidades($cnx,"",[],$err);
+echo "<pre>";
+var_dump($ent);
+echo "</pre>";

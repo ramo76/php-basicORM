@@ -190,8 +190,26 @@ class Entidad{
         }
 
     }
-    private function saveChilds(){
+    public function saveChilds(){
+        $err = [];
 
+        foreach($this->maps as $key => $map){
+
+            foreach($this->{$map["property"]} as $subEntity){
+                $subEntity->{$map["key_rel"]} = $this->{$map["key"]};
+                var_dump($subEntity);
+                if(!$subEntity->save()){
+                    $err[] = $subEntity->last_error;
+                }
+            }
+
+        }
+        if(count($err)){
+            $this->last_error = implode("\n",$err);
+            return false;
+        }
+       
+        return true;
     }
    
     public function insert(){
@@ -263,7 +281,9 @@ class Entidad{
         return true;
     }
     public function addChild($prop_name){
-        $this->$prop_name[] = new $this->maps[$prop_name]["class"];
+        $subEntity = new $this->maps[$prop_name]["class"]($this->DB);
+        $this->$prop_name[] = $subEntity;
+        return $subEntity;
     }
 
     public function getChild($prop_name, $callback){
